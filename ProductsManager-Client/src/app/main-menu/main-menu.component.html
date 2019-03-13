@@ -1,0 +1,51 @@
+<div class="example-container mat-elevation-z8">
+  <app-filter (filterChanged)="FilterChanged($event)"></app-filter>
+
+  <mat-table
+    #table
+    matSort
+    class="mat-elevation-z8"
+    [dataSource]="dataSource"
+    (scroll)="onTableScroll($event)"
+  >
+    <ng-container matColumnDef="_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+      <mat-cell *matCellDef="let item" (click)="ItemSelected(item)">
+        {{ item._id }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="product">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.product }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Price
+      </mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.price }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="inStock">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        In Stock?
+      </mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.inStock }} </mat-cell>
+    </ng-container>
+
+    <mat-header-row
+      *matHeaderRowDef="displayedColumns; sticky: true"
+    ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+
+<mat-progress-spinner *ngIf="loading"
+class="spinner"
+[color]="color"
+[mode]="mode"
+[value]="value">
+</mat-progress-spinner>

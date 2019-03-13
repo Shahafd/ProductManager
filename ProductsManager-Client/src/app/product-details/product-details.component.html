@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>{{ data.product.product }}</h1>
+<div mat-dialog-content></div>
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Price: {{ data.product.price }}</mat-card-title>
+    <mat-card-subtitle style="color:green" *ngIf="data.product.inStock"
+      >In Stock!</mat-card-subtitle
+    >
+    <mat-card-subtitle style="color:red" *ngIf="!data.product.inStock"
+      >Not In Stock</mat-card-subtitle
+    >
+  </mat-card-header>
+  <img
+    mat-card-image
+    src="{{ data.product.imageUrl }}"
+    alt="Photo of {{ data.product.product }}"
+  />
+  <mat-card-actions> </mat-card-actions>
+</mat-card>
