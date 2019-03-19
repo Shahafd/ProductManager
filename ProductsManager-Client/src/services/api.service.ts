@@ -8,8 +8,9 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
   providedIn: "root"
 })
 export class ApiService {
-   url: string = "http://localhost:3000/api/";
+  url: string = "http://localhost:3000/api/";
   getAllProductsRoute = "products/GetAllProducts";
+  getAllProductsByName = "products/GetAllProductsByName";
   getSearchedProductsRoute = "products/GetProducts";
   getMostUsedWordsRoute = "products/GetMostUsedWords";
   getNumOfItemsPerRquest = "products/GetNumOfItemsPerRquest";
@@ -17,7 +18,16 @@ export class ApiService {
 
   GetAllProducts(index: number) {
     return this.http
-      .get(this.url + this.getAllProductsRoute + "/" + (index))
+      .get(this.url + this.getAllProductsRoute + "/" + index)
+      .pipe(
+        tap(res => {
+          return res as Product[];
+        })
+      );
+  }
+  GetProductsByName(index: number) {
+    return this.http
+      .get(this.url + this.getAllProductsByName + "/" + index)
       .pipe(
         tap(res => {
           return res as Product[];
@@ -33,7 +43,7 @@ export class ApiService {
   }
   GetSearchedProducts(index: number, input: string) {
     return this.http
-      .get(this.url + this.getSearchedProductsRoute + "/" + input + "/" + (index))
+      .get(this.url + this.getSearchedProductsRoute + "/" + input + "/" + index)
       .pipe(
         tap(res => {
           return res as Product[];

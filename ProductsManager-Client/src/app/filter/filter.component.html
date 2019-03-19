@@ -8,3 +8,5 @@
     </mat-autocomplete>
   </mat-form-field>
 </form>
+<button class="btn btn-warning" [disabled]="orderById" (click)="OrderByIdClick()" >Order By Id</button>
+<button class="btn btn-info" [disabled]="orderByName" (click)="OrderByNameClick()" >Order By Name</button>

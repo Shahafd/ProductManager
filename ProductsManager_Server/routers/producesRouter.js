@@ -60,6 +60,26 @@ router.get("/GetAllProducts/:index", (req, res) => {
     }
   });
 });
+router.get("/GetAllProductsByName/:index", (req, res) => {
+  index = parseInt(req.params["index"]);
+  console.log(index);
+  if (!index || index >= 1000) {
+    index = 1;
+  }
+  Product.aggregate([
+    { $sort: { product: 1 } },
+    { $skip: index },
+    { $limit: parseInt(config.itemsAmount) },
+    { $match: {} }
+  ]).exec((error, doc) => {
+    if (error) {
+      console.log(error);
+      res.sendStatus(400);
+    } else {
+      res.send(doc);
+    }
+  });
+});
 router.get("/INIT",auth.authenticateTokenOrUnauthorized, (req, res) => {
   data.forEach(item => {
     var product = new Product({

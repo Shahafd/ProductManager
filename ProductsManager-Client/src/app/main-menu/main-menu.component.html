@@ -1,5 +1,5 @@
 <div class="example-container mat-elevation-z8">
-  <app-filter (filterChanged)="FilterChanged($event)"></app-filter>
+  <app-filter (filterChanged)="FilterChanged($event)" (orderChanged)="OrderChanged($event)"></app-filter>
 
   <mat-table
     #table

@@ -23,6 +23,8 @@ export class MainMenuComponent implements OnInit {
   value = 50;
 
   @ViewChild(MatSort) sort: MatSort;
+  orderById: boolean = true;
+  orderByName: boolean = false;
   index: number = 1;
   lastinput: string = "";
   itemsAmount: number = 20;
@@ -60,23 +62,24 @@ export class MainMenuComponent implements OnInit {
     const buffer = 5;
     const limit = tableScrollHeight - tableViewHeight - buffer;
     if (scrollLocation > limit) {
-      this.loading = true;
       setTimeout(() => {
         this.GoToTop();
         this.index += this.itemsAmount;
         if (this.index >= 1000) {
           this.index = 1;
         }
-        this.GetProducts();
+        if (this.orderById) {
+          this.GetProducts();
+        } else {
+          this.GetProductsOrderByName();
+        }
       }, 500);
-      this.loading = false;
     }
   }
   GoToTop() {
     document.querySelector("mat-table").scrollTop = 100;
   }
   ItemSelected(product: Product) {
-    this.loading = true;
     setTimeout(() => {
       this.dialog.open(ProductDetailsComponent, {
         data: {
@@ -84,10 +87,33 @@ export class MainMenuComponent implements OnInit {
         }
       });
     }, 500);
-    this.loading = false;
+  }
+  OrderChanged(obj) {
+    this.index = 1;
+    let input = obj.input;
+    let order = obj.order;
+    if (order === "ID") {
+      this.orderById = true;
+      this.orderByName = false;
+    } else {
+      this.orderByName = true;
+      this.orderById = false;
+    }
+    if (input === "" && this.orderById) {
+      this.GetProducts();
+    } else if (input === "" && this.orderByName) {
+      this.GetProductsOrderByName();
+    }
+  }
+  GetProductsOrderByName() {
+    this.apiSerivce
+      .GetProductsByName(this.index)
+      .subscribe((res: Product[]) => {
+        this.products = res;
+        this.dataSource = new MatTableDataSource(this.products);
+      });
   }
   FilterChanged(value) {
-    this.loading = true;
     setTimeout(() => {
       this.lastinput = value;
       if (!value) {
@@ -99,12 +125,11 @@ export class MainMenuComponent implements OnInit {
           .subscribe((res: Product[]) => {
             this.products = res;
             this.dataSource = new MatTableDataSource(this.products);
-            if (this.lastinput != value) {
+            if (this.lastinput !== value) {
               this.index += this.itemsAmount;
             }
           });
       }
     }, 500);
-    this.loading = false;
   }
 }
